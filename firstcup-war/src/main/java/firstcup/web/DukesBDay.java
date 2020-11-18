@@ -10,6 +10,7 @@
 
 package firstcup.web;
 
+import firstcup.connectors.DukesAgeConnector;
 import firstcup.ejb.DukesBirthdayBean;
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.WebApplicationException;
@@ -30,13 +32,14 @@ public class DukesBDay implements Serializable {
    
     @EJB
     private DukesBirthdayBean dukesBirthdayBean;
-    protected int age;
+    @Inject
+    private DukesAgeConnector dukesAgeConnector;
     @NotNull
     protected Date yourBD;
     protected int ageDiff;
     protected int absAgeDiff;
     protected Double averageAgeDifference;
-    private static final Logger logger = Logger.getLogger("firstcup.web.DukesBDay");
+    private static final Logger logger = Logger.getLogger(DukesBDay.class.getName());
 
 
     /** Creates a new instance of DukesBDay */
@@ -54,29 +57,12 @@ public class DukesBDay implements Serializable {
     }
     
     /**
-     * Get the value of age
+     * Get Duke's age from an external service
      *
-     * @return the value of age
+     * @return the value of Duke's age
      */
     public int getAge() {
-        try {
-            Client client = ClientBuilder.newClient();
-            WebTarget target = client.target("http://localhost:8080/dukes-age/webapi/dukesAge");
-            String response = target.request().get(String.class);
-            age = Integer.parseInt(response);
-        } catch (IllegalArgumentException | NullPointerException | WebApplicationException ex) {
-            logger.severe("processing of HTTP response failed");
-        } 
-        return age;
-    }
-
-    /**
-     * Set the value of age
-     *
-     * @param age new value of age
-     */
-    public void setAge(int age) {
-        this.age = age;
+        return dukesAgeConnector.getAge();
     }
 
     /**

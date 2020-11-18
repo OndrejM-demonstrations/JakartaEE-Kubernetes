@@ -15,12 +15,110 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>jakarta.firstcup</groupId>
-        <artifactId>examples</artifactId>
+        <groupId>jakartaee-k8s</groupId>
+        <artifactId>jakartaee-k8s-parent</artifactId>
         <version>8.1-SNAPSHOT</version>
-    </parent>    
+    </parent>
 
     <artifactId>firstcup-war</artifactId>
     <packaging>war</packaging>
     <description>The web front-end for the First Cup Tutorial example.</description>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>fish.payara.maven.plugins</groupId>
+                <artifactId>payara-micro-maven-plugin</artifactId>
+                <version>1.3.0</version>
+                <configuration>
+                    <payaraVersion>${version.payara}</payaraVersion>
+                    <commandLineOptions>
+                        <option>
+                            <key>--autoBindHttp</key>
+                        </option>
+                        <option>
+                            <key>--nocluster</key>
+                        </option>
+                        <option>
+                            <key>--deploy</key>
+                            <value>${basedir}/target/${project.build.finalName}</value>
+                        </option>
+                    </commandLineOptions>
+                    <contextRoot>/</contextRoot>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>deploy-to-docker-repo</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.jkube</groupId>
+                <artifactId>kubernetes-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>deploy-to-kubernetes</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>resource</goal>
+                            <goal>apply</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>            
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>2.6.0</version>
+                    <configuration>
+                        <to>
+                            <image>${docker.registry}/${project.groupId}/${project.artifactId}:latest</image>
+                        </to>
+                        <from>
+                            <image>docker.io/payara/micro:jdk11</image>
+                        </from>
+                        <container>
+                            <appRoot>/opt/payara/deployments/ROOT.war</appRoot>
+                            <args>
+                                <arg>--noCluster</arg>
+                                <arg>--deploy</arg>
+                                <arg>/opt/payara/deployments/ROOT.war</arg>
+                            </args>
+                        </container>
+                        <allowInsecureRegistries>true</allowInsecureRegistries>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.jkube</groupId>
+                    <artifactId>kubernetes-maven-plugin</artifactId>
+                    <version>1.0.2</version>
+                    <configuration>
+                        <enricher>
+                            <config>
+                                <jkube-service>
+                                    <type>LoadBalancer</type>
+                                </jkube-service>
+                                <jkube-controller>
+                                    <replicaCount>1</replicaCount>
+                                    <pullPolicy>Always</pullPolicy>
+                                </jkube-controller>
+                            </config>
+                        </enricher>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
 </project>

@@ -17,10 +17,11 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:fc="http://xmlns.jcp.org/jsf/composite/components">
     <h:head>
-        <title>Firstcup Greeting Page</title>
+        <title>Jakarta EE Firstcup in Kubernetes on Payara Micro</title>
+        <h:outputStylesheet library="css" name="main.css"/>
     </h:head>
     <h:body>
-        <h:form>
+        <h:form styleClass="form">
             <h2>
                 <h:outputText value="#{bundle.Welcome}"/>
             </h2>
@@ -34,6 +35,7 @@
             <p/>
             <h:commandButton value="#{bundle.Submit}" 
                              action="#{dukesBDay.processBirthday}"/>
+            <h:outputText styleClass="info" value="IP address of Duke's age service: #{dukesAge.lastHost} "/>
         </h:form>
 
     </h:body>
