@@ -21,7 +21,7 @@
     <artifactId>jakartaee-k8s-parent</artifactId>
     <version>8.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>First Cup of Jakarta EE Tutorial Examples</name>
+    <name>Example: First Cup</name>
 
     <scm>
         <connection>scm:git:git@github.com:eclipse-ee4j/jakartaee-firstcup-examples.git</connection>

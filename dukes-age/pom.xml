@@ -104,13 +104,13 @@
                     <configuration>
                         <enricher>
                             <config>
-                                <jkube-service>
-                                    <type>LoadBalancer</type>
-                                </jkube-service>
                                 <jkube-controller>
                                     <replicaCount>1</replicaCount>
                                     <pullPolicy>Always</pullPolicy>
                                 </jkube-controller>
+                                <jkube-service>
+                                    <type>LoadBalancer</type>
+                                </jkube-service>
                             </config>
                         </enricher>
                     </configuration>
@@ -118,5 +118,5 @@
             </plugins>
         </pluginManagement>
     </build>
-
+    <name>Example: Dukes Age Service</name>
 </project>

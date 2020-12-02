@@ -120,5 +120,5 @@
             </plugins>
         </pluginManagement>
     </build>
-
+    <name>Example: Frontend</name>
 </project>
