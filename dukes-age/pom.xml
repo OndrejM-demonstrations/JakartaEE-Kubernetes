@@ -51,7 +51,7 @@
                 <executions>
                     <execution>
                         <id>deploy-to-docker-repo</id>
-                        <phase>package</phase>
+                        <phase>install</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
@@ -64,7 +64,7 @@
                 <executions>
                     <execution>
                         <id>deploy-to-kubernetes</id>
-                        <phase>package</phase>
+                        <phase>install</phase>
                         <goals>
                             <goal>resource</goal>
                             <goal>apply</goal>
